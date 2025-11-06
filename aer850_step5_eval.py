@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Nov  5 20:08:34 2025
+
 
 @author: quich
 """
@@ -225,4 +225,5 @@ show_preds_grid(custom, "CustomCNN", SAMPLES)
 
 print("\nStep 5 complete — exported:")
 print("  - figure_test_resnet18.png")
+
 print("  - figure_test_customcnn.png")
