@@ -214,9 +214,18 @@ def verify_data_structure(data_dir):
             print(f"Warning: Class directory {class_name} not found in {data_dir}")
             return False
         
-        # Check if directory has images
-        images = [f for f in os.listdir(class_path) 
-                 if f.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp'))]
+        # Check if directory has images with robust extension checking
+        valid_extensions = ('.png', '.jpg', '.jpeg', '.bmp', '.gif', '.tiff')
+        images = []
+        try:
+            for f in os.listdir(class_path):
+                file_path = os.path.join(class_path, f)
+                if os.path.isfile(file_path) and f.lower().endswith(valid_extensions):
+                    images.append(f)
+        except (OSError, PermissionError) as e:
+            print(f"Error reading directory {class_path}: {e}")
+            return False
+        
         print(f"Found {len(images)} images in {class_name}")
     
     return True

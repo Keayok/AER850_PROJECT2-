@@ -44,23 +44,31 @@ def plot_training_history(history, save_path='results/training_history.png'):
     axes[0, 1].legend()
     axes[0, 1].grid(True)
     
-    # Plot precision
-    axes[1, 0].plot(history.history['precision'], label='Training Precision')
-    axes[1, 0].plot(history.history['val_precision'], label='Validation Precision')
-    axes[1, 0].set_title('Model Precision')
-    axes[1, 0].set_xlabel('Epoch')
-    axes[1, 0].set_ylabel('Precision')
-    axes[1, 0].legend()
-    axes[1, 0].grid(True)
+    # Plot precision (check if metric exists)
+    precision_keys = [k for k in history.history.keys() if 'precision' in k.lower() and not k.startswith('val_')]
+    val_precision_keys = [k for k in history.history.keys() if 'precision' in k.lower() and k.startswith('val_')]
     
-    # Plot recall
-    axes[1, 1].plot(history.history['recall'], label='Training Recall')
-    axes[1, 1].plot(history.history['val_recall'], label='Validation Recall')
-    axes[1, 1].set_title('Model Recall')
-    axes[1, 1].set_xlabel('Epoch')
-    axes[1, 1].set_ylabel('Recall')
-    axes[1, 1].legend()
-    axes[1, 1].grid(True)
+    if precision_keys and val_precision_keys:
+        axes[1, 0].plot(history.history[precision_keys[0]], label='Training Precision')
+        axes[1, 0].plot(history.history[val_precision_keys[0]], label='Validation Precision')
+        axes[1, 0].set_title('Model Precision')
+        axes[1, 0].set_xlabel('Epoch')
+        axes[1, 0].set_ylabel('Precision')
+        axes[1, 0].legend()
+        axes[1, 0].grid(True)
+    
+    # Plot recall (check if metric exists)
+    recall_keys = [k for k in history.history.keys() if 'recall' in k.lower() and not k.startswith('val_')]
+    val_recall_keys = [k for k in history.history.keys() if 'recall' in k.lower() and k.startswith('val_')]
+    
+    if recall_keys and val_recall_keys:
+        axes[1, 1].plot(history.history[recall_keys[0]], label='Training Recall')
+        axes[1, 1].plot(history.history[val_recall_keys[0]], label='Validation Recall')
+        axes[1, 1].set_title('Model Recall')
+        axes[1, 1].set_xlabel('Epoch')
+        axes[1, 1].set_ylabel('Recall')
+        axes[1, 1].legend()
+        axes[1, 1].grid(True)
     
     plt.tight_layout()
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
